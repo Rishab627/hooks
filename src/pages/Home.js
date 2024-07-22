@@ -1,20 +1,20 @@
-import { faker } from '@faker-js/faker';
-import { Button } from '@material-tailwind/react';
-import React, { useState } from 'react';
+import React from 'react'
+import CategoryCard from '../components/CategoryCard';
+import { useApiHooks } from '../hooks/apiHooks';
+import LoadingCompo from '../components/LoadingCompo';
+
 const Home = () => {
 
-  const [users, setUsers] = useState([]);
+    const [load, err, data] = useApiHooks({api: 'https://www.themealdb.com/api/json/v1/1/categories.php'});
+ 
+
+  if (load) {
+    return <LoadingCompo/>
+  }
 
 
-
-  const handleAdd = () => {
-    const newObj = {
-      email: faker.internet.email(),
-      username: faker.internet.userName(),
-      image: faker.image.avatarLegacy()
-    };
-    setUsers((prev) => [...prev, newObj]);
-
+  if (err) {
+    return <h1>{err}</h1>
   }
 
 
@@ -22,25 +22,12 @@ const Home = () => {
 
 
   return (
-    <div className='p-4'>
+    <div className='p-3 grid grid-cols-3 gap-4'>
 
-      <div className="adds flex justify-end">
-        <Button onClick={handleAdd} ripple={true} color='green'>Add User</Button>
-      </div>
-
-      <div className="users">
-        {users.map((user, i) => {
-          return <div key={i}>
-            <img src={user.image} alt="" />
-            <h1>{user.username}</h1>
-            <h1>{user.email}</h1>
-
-          </div>
-        })}
-      </div>
-
-
-
+    {data?.categories.map((cat, i) => {
+      return <CategoryCard cat={cat} key={i} />
+    })}
+      
     </div>
   )
 }
