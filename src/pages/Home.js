@@ -1,34 +1,60 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import CategoryCard from '../components/CategoryCard';
-import { useApiHooks } from '../hooks/apiHooks';
-import LoadingCompo from '../components/LoadingCompo';
 
 const Home = () => {
 
-    const [load, err, data] = useApiHooks({api: 'https://www.themealdb.com/api/json/v1/1/categories.php'});
- 
+  const [page, setPage] = useState(1);
+  const [data, setData] = useState();
 
-  if (load) {
-    return <LoadingCompo/>
+  const getData = async () => {
+    try {
+      const response = await axios.get('https://dummyjson.com/recipes', {
+        // params: {
+        //   api_key: 'f3ad2eea7599eade545772ddb286d350',
+        //   page: page
+        // }
+      });
+      setData(response.data);
+    } catch (err) {
+    }
+
   }
 
+  useEffect(() => {
+    getData();
+    console.log('hello see');
+  }, [page]);
 
-  if (err) {
-    return <h1>{err}</h1>
-  }
-
-
-
-
+  console.log(data);
+  console.log('render');
 
   return (
-    <div className='p-3 grid grid-cols-3 gap-4'>
 
-    {data?.categories.map((cat, i) => {
-      return <CategoryCard cat={cat} key={i} />
-    })}
+  <div>
+    
+    
+    {data && <div className='grid grid-cols-3 space-y-5 gap-5 '>
+
+    {data?.recipes.map((rec) => {
+      return <div className='w-[500px]' key={rec.id}>
+      <img className='w-full' src={rec.image} alt="" />
+      <h1 className='text-2xl font-semibold'>{rec.name}</h1>
+
+      {rec.ingredients.map((ing, i) => {
+        return <p key={i}>{`${i+1}.`}{ing}</p>
+      })}
       
+      
+      </div>
+    })}
+    
+    
+    
+    </div>}
+    
     </div>
+    
   )
 }
 

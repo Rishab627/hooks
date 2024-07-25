@@ -9,31 +9,33 @@ import {
   } from "@material-tailwind/react";
 import { useNavigate } from 'react-router';
 
-const CategoryCard = ({cat: {idCategory, strCategory, strCategoryThumb, strCategoryDescription}}) => {
+const CategoryCard = ({rec: {id, name, image}}) => {
 
 
 
     const nav = useNavigate();
   return (
-    <Card className="mt-6">
-    <CardHeader color="blue-gray" className="relative h-56">
-      <img className='w-full'
-        src={strCategoryThumb}
-        alt="card-image"
-      />
-    </CardHeader>
-    <CardBody>
-      <Typography variant="h5" color="blue-gray" className="mb-2">
-       {strCategory}
-      </Typography>
-      <Typography>
-        {strCategoryDescription.substring(0,100)}
-      </Typography>
-    </CardBody>
-    <CardFooter className="pt-0">
-      <Button onClick={() => nav(`/category/${strCategory}`)}>Read More</Button>
-    </CardFooter>
-  </Card>
+        <d className='grid grid-cols-3'>
+        <Card className="mt-6 w-[500px] flex">
+        <CardHeader color="blue-gray" className="relative h-56">
+          <img className='w-full'
+            src={image}
+            alt="card-image"
+          />
+        </CardHeader>
+        <CardBody>
+          <Typography variant="h5" color="blue-gray" className="mb-2">
+           {name}
+          </Typography>
+          <Typography>
+            {''}
+          </Typography>
+        </CardBody>
+        <CardFooter className="pt-0">
+          <Button onClick={() => nav(`/category/${'strCategory'}`)}>Read More</Button>
+        </CardFooter>
+      </Card>
+      </d>
   )
 }
 

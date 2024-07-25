@@ -5,8 +5,7 @@ import About from './pages/About';
 import RootLayout from './components/RootLayout';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
-import CategoryItems from './pages/CategoryItems';
-import FoodDetail from './pages/FoodDetail';
+
 
 const App = () => {
 
@@ -21,16 +20,7 @@ const App = () => {
           element: <Home />,
 
         },
-        {
-          path: 'category/:cat',
-          element: <CategoryItems />,
-
-        },
-        {
-          path: 'food-detail/:id',
-          element: <FoodDetail />,
-
-        },
+        
 
         {
           path: 'about-page',
