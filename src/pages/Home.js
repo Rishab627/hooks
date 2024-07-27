@@ -1,61 +1,80 @@
+import { Button, Input, avatar } from '@material-tailwind/react';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import CategoryCard from '../components/CategoryCard';
+import { useFormik } from 'formik'
+import React from 'react'
+import { useState } from 'react';
+import { useEffect } from 'react';
 
-const Home = () => {
+const App = () => {
 
-  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('spider');
   const [data, setData] = useState();
+
+  const formik = useFormik({
+    initialValues: {
+      search: ''
+    },
+    onSubmit: (val) => {
+
+      setSearch(val.search);
+
+    }
+  });
 
   const getData = async () => {
     try {
-      const response = await axios.get('https://dummyjson.com/recipes', {
-        // params: {
-        //   api_key: 'f3ad2eea7599eade545772ddb286d350',
-        //   page: page
-        // }
-      });
+
+      const response = await axios.get(`http://www.omdbapi.com?apikey=6905a701&s=${search}`);
       setData(response.data);
     } catch (err) {
-    }
 
+    }
   }
 
   useEffect(() => {
     getData();
-    console.log('hello see');
-  }, [page]);
+
+  }, [search])
 
   console.log(data);
-  console.log('render');
+
 
   return (
 
-  <div>
-    
-    
-    {data && <div className='grid grid-cols-3 space-y-5 gap-5 '>
 
-    {data?.recipes.map((rec) => {
-      return <div className='w-[500px]' key={rec.id}>
-      <img className='w-full' src={rec.image} alt="" />
-      <h1 className='text-2xl font-semibold'>{rec.name}</h1>
+    <div className='p-5'>
+      <div className="search-info" >
+        <form onSubmit={formik.handleSubmit} className='flex gap-5 items-center'>
+          <div className='place-items-center'>
+            <Input className='max-w-sm'
+              name='search'
+              value={formik.values.search}
+              onChange={formik.handleChange}
+              label='search movie' />
+          </div>
 
-      {rec.ingredients.map((ing, i) => {
-        return <p key={i}>{`${i+1}.`}{ing}</p>
-      })}
-      
-      
+          <Button type='submit' size='sm'>Submit</Button>
+        </form>
       </div>
-    })}
-    
-    
-    
-    </div>}
-    
+      <br />
+
+
+      <div className="main grid grid-cols-4 space-y-5">
+      
+          {data?.Search.map((mov) => {
+            return <div className="movie" key={mov.imdbID}>
+                <img src={mov.Poster} alt="" />
+                <h1 className='font-semibold'>{mov.Type}</h1>
+                <h1 className='text-2xl font-bold'>{mov.Title}</h1>
+                <p>{mov.Year}</p>
+            </div>
+          })}
+        
+      </div>
+
+
     </div>
-    
   )
 }
 
-export default Home
+export default App
