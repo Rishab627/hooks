@@ -1,10 +1,10 @@
 import React from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Home from './pages/Home';
-import About from './pages/About';
-import RootLayout from './components/RootLayout';
-import Contact from './pages/Contact';
-import NotFound from './pages/NotFound';
+import RootLayout from './ui/RootLayout';
+import Home from './features/dashboard/Home';
+import Blogs from './features/blog/Blogs';
+import AddForm from './features/blog/AddForm';
+
 
 
 const App = () => {
@@ -17,25 +17,14 @@ const App = () => {
       children: [
         {
           index: true,
-          element: <Home />,
+          element: <Blogs/>,
 
         },
-        
-
         {
-          path: 'about-page',
-          element: <About />
-        },
-        {
-          path: 'contact-page',
-          element: <Contact />
-        },
-
-        {
-          path: '*',
-          element: <NotFound />
+          path: 'add-blog',
+          element:<AddForm/>
         }
-
+    
 
 
       ]
