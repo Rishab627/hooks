@@ -1,23 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { setBlogToLocal, getBlogsFromLocal } from "../../hooks/localStorage";
 
 export const blogSlice = createSlice({
     name : 'blogSlice',
     initialState : {
-        blogs : [11, 22, 33, 44, 55]
+        blogs : getBlogsFromLocal()
     },
     reducers: {
         addBlog: (state, action) => {
             state.blogs.push(action.payload);
+            setBlogToLocal([...state.blogs]);
         },
 
 
-        removeBlog: () => {
+        removeBlog: (state, action) => {
+            state.blogs.splice(action.payload, 1);
+            setBlogToLocal([...state.blogs]);
+        },
 
-        }
-
+        updateBlog: (state, action) => {
+            state.blogs = state.blogs.map((blog) => {
+                return blog.id === action.payload.id ? action.payload: blog;
+            });
+            setBlogToLocal([...state.blogs]);
+        },
 
     }
 });
 
 
-export const {addBlog, removeBlog} =blogSlice.actions;
+export const {addBlog, removeBlog, updateBlog} =blogSlice.actions;

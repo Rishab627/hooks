@@ -4,6 +4,7 @@ import RootLayout from './ui/RootLayout';
 import Home from './features/dashboard/Home';
 import Blogs from './features/blog/Blogs';
 import AddForm from './features/blog/AddForm';
+import EditForm from './features/blog/EditForm';
 
 
 
@@ -23,6 +24,11 @@ const App = () => {
         {
           path: 'add-blog',
           element:<AddForm/>
+        },
+
+        {
+          path: 'edit-blog/:id',
+          element:<EditForm/>
         }
     
 
