@@ -1,10 +1,9 @@
 import React from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import RootLayout from './ui/RootLayout';
-import Home from './features/dashboard/Home';
-import Blogs from './features/blog/Blogs';
-import AddForm from './features/blog/AddForm';
-import EditForm from './features/blog/EditForm';
+import Main from './features/dashboard/Main';
+import Login from './features/auth/Login';
+import Register from './features/auth/Register';
 
 
 
@@ -18,18 +17,18 @@ const App = () => {
       children: [
         {
           index: true,
-          element: <Blogs/>,
+          element:<Main/>
 
         },
         {
-          path: 'add-blog',
-          element:<AddForm/>
+            path: 'login',
+            element: <Login/>
         },
-
         {
-          path: 'edit-blog/:id',
-          element:<EditForm/>
+            path: 'register',
+            element: <Register/>
         }
+    
     
 
 
