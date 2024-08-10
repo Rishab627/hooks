@@ -4,10 +4,14 @@ import RootLayout from './ui/RootLayout';
 import Main from './features/dashboard/Main';
 import Login from './features/auth/Login';
 import Register from './features/auth/Register';
+import { useGetAllProductsQuery } from './features/product/productApi';
 
 
 
 const App = () => {
+
+
+    const {isError, isFetching, isLoading, data} = useGetAllProductsQuery();
 
   const router = createBrowserRouter([
 
