@@ -11,7 +11,7 @@ import { useGetAllProductsQuery } from './features/product/productApi';
 const App = () => {
 
 
-    const {isError, isFetching, isLoading, data} = useGetAllProductsQuery();
+    // const {isError, isFetching, isLoading, data} = useGetAllProductsQuery();
 
   const router = createBrowserRouter([
 
