@@ -24,7 +24,7 @@ import { useNavigate } from "react-router";
             </Typography>
             <Input
               size="lg"
-              placeholder="name@mail.com"
+              placeholder="Your Name"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
               labelProps={{
                 className: "before:content-none after:content-none",
