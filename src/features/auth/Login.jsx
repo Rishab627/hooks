@@ -5,12 +5,18 @@ import {
     Typography,
   } from "@material-tailwind/react";
 import { useNavigate } from "react-router";
-import { Formik, useFormik } from "formik";
+import { useFormik } from "formik";
 import * as Yup from 'yup';  
 import { useLoginUserMutation } from "./userApi";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { addUser } from "./userSlice";
+
+
+const loginSchema = Yup.object({
+  email: Yup.string().email().required(),
+  password: Yup.string().required()
+});
   
   const Login = () => {
 
@@ -19,10 +25,7 @@ import { addUser } from "./userSlice";
     const dispatch = useDispatch();
 
 
-    const loginSchema = Yup.object({
-      email: Yup.string().email().required(),
-      password: Yup.string().required()
-    });
+    
 
     const {values, errors, handleSubmit, handleChange, touched} = useFormik({
       initialValues: {
@@ -34,6 +37,7 @@ import { addUser } from "./userSlice";
           const response = await loginUser(val).unwrap();
           toast.success('Successfully Logged in');
           dispatch(addUser(response));
+          nav(-1);
         } catch (error) {
           toast.error(error.data?.message);
         }

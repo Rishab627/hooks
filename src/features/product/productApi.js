@@ -1,28 +1,63 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseUrl } from "../../constants/api_urls";
 
 
 export const productApi = createApi({
     reducerPath: 'productApi',
-    baseQuery: fetchBaseQuery({baseUrl: 'https://dummyjson.com' }),
+    baseQuery: fetchBaseQuery({baseUrl: `${baseUrl}/products` }),
    
    
     endpoints: (builder) => ({
         
         getAllProducts: builder.query({
             query: (q) => ({
-               url: '/products' ,
+               url: '/' ,
                method: 'GET'
             })
         }),
         
         getProductById: builder.query({
             query: (id) => ({
-               url: `/products/${id}` ,
+               url: `/${id}` ,
                method: 'GET'
             })
-        })
+        }),
+
+
+        addProduct: builder.mutation({
+            query: (q) => ({
+              url: '/',
+              body: q.body,
+              headers: {
+                Authorization: q.token
+              },
+              method: 'POST',
+            })
+          }),
+
+
+          updateProduct: builder.mutation({
+            query: (q) => ({
+              url: `/${q.id}`,
+              body: q.body,
+              headers: {
+                Authorization: q.token
+              },
+              method: 'PATCH',
+            })
+          }),
+
+        removeProductById: builder.mutation({
+            query: (q) => ({
+              url: `/${q.id}`,
+              headers: {
+                Authorization: q.token
+              },
+              method: 'DELETE',
+            })
+          })
 
     })
 });
 
-export const { useGetAllProductsQuery, useGetProductByIdQuery} = productApi;
+export const { useGetAllProductsQuery, useGetProductByIdQuery, useAddProductMutation, useRemoveProductByIdMutation, useUpdateProductMutation} = productApi;
