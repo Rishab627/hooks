@@ -13,6 +13,7 @@ import {
   UserCircleIcon,
   ChevronDownIcon,
   PowerIcon,
+  ShoppingBagIcon
 
 } from "@heroicons/react/24/solid";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,11 +21,34 @@ import { useNavigate } from "react-router";
 import { removeUser } from "../features/auth/userSlice";
 
 // profile menu component
-const profileMenuItems = [
+const userMenu = [
   {
-    label: "My Profile",
+    label: "Profile",
     icon: UserCircleIcon,
     value: 'profile'
+  },
+
+
+  {
+    label: "Sign Out",
+    icon: PowerIcon,
+    value: 'exist'
+  },
+];
+
+
+const adminMenu = [
+  {
+    label: "Profile",
+    icon: UserCircleIcon,
+    value: 'profile'
+  },
+
+
+  {
+    label: "Products",
+    icon: ShoppingBagIcon,
+    value: 'products'
   },
 
 
@@ -44,6 +68,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
+  const menu = user?.isAdmin ? adminMenu : userMenu;
 
 
   return (
@@ -85,8 +110,8 @@ const Header = () => {
               </Button>
             </MenuHandler>
             <MenuList className="p-1">
-              {profileMenuItems.map(({ label, icon, value }, key) => {
-                const isLastItem = key === profileMenuItems.length - 1;
+              {menu.map(({ label, icon, value }, key) => {
+                const isLastItem = key === menu.length - 1;
                 return (
                   <MenuItem
                     key={label}
@@ -94,9 +119,12 @@ const Header = () => {
                       switch (value) {
                         case 'exist':
                           dispatch(removeUser());
+                        
+                        case 'products':
+                          nav('/product-admin')
                           closeMenu();
-                        default:
-                          closeMenu();
+
+
                       }
                     }}
                     className={`flex items-center gap-2 rounded ${isLastItem

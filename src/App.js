@@ -4,6 +4,8 @@ import RootLayout from './ui/RootLayout';
 import Main from './features/dashboard/Main';
 import Login from './features/auth/Login';
 import Register from './features/auth/Register';
+import ProductAdmin from './features/admin/ProductAdmin';
+import AddForm from './features/admin/AddForm';
 
 
 
@@ -30,6 +32,14 @@ const App = () => {
         {
             path: 'register',
             element: <Register/>
+        },
+        {
+          path: 'product-admin',
+          element: <ProductAdmin/>
+        },
+        {
+          path: 'product-add',
+          element: <AddForm/>
         }
     
     

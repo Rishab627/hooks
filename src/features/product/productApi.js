@@ -13,14 +13,16 @@ export const productApi = createApi({
             query: (q) => ({
                url: '/' ,
                method: 'GET'
-            })
+            }),
+            providesTags: ['Products']
         }),
         
         getProductById: builder.query({
             query: (id) => ({
                url: `/${id}` ,
                method: 'GET'
-            })
+            }),
+            providesTags: ['Products']
         }),
 
 
@@ -32,7 +34,8 @@ export const productApi = createApi({
                 Authorization: q.token
               },
               method: 'POST',
-            })
+            }),
+            invalidatesTags: ['Products']
           }),
 
 
@@ -44,7 +47,8 @@ export const productApi = createApi({
                 Authorization: q.token
               },
               method: 'PATCH',
-            })
+            }),
+            invalidatesTags: ['Products']
           }),
 
         removeProductById: builder.mutation({
@@ -54,7 +58,8 @@ export const productApi = createApi({
                 Authorization: q.token
               },
               method: 'DELETE',
-            })
+            }),
+            invalidatesTags: ['Products']
           })
 
     })
