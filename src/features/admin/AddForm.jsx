@@ -8,28 +8,19 @@ import {
   Select,
 } from "@material-tailwind/react";
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useAddProductMutation } from "../product/productApi";
+import { productSchema } from "./ProductEdit/ProductEditForm";
+
+
 
 const AddForm = () => {
   const [addProduct, { isLoading }] = useAddProductMutation();
 
   const { user } = useSelector((state) => state.userSlice);
   const nav = useNavigate();
-  const productSchema = Yup.object({
-    product_name: Yup.string().required(),
-    product_detail: Yup.string().required(),
-    product_price: Yup.number().required(),
-    countInStock: Yup.number().required(),
-    brand: Yup.string().required(),
-    category: Yup.string().required(),
-    product_image: Yup.mixed().required().test('fileType', 'invalid image', (e) => {
-      return ['image/jpg', 'image/png', 'image/jpeg'].includes(e.type);
-    })
-  });
 
   const { values, handleChange,
     handleSubmit, errors, setFieldValue, touched } = useFormik({
@@ -68,10 +59,11 @@ const AddForm = () => {
 
         } catch (err) {
           toast.error(`${err.data?.message}`);
+          console.log(err)
         }
 
       },
-      //validationSchema: productSchema
+      validationSchema: productSchema
 
     });
 
@@ -112,22 +104,27 @@ const AddForm = () => {
 
             <Option value="samsung">Samsung</Option>
             <Option value="apple">Apple</Option>
-            <Option value="Samsung">Samsung</Option>
             <Option value="dolce">Dolce</Option>
 
           </Select>
+          {errors.brand && touched.brand && <h1 className='text-pink-700'>{errors.brand}</h1>}
+
+          
           <Select onChange={(e) => setFieldValue('category', e)} label="Select Category">
             <Option value="clothes">Clothes</Option>
 
             <Option value="tech">Tech</Option>
           </Select>
+          {errors.category && touched.category && <h1 className='text-pink-700'>{errors.category}</h1>}
 
           <Textarea
             size="lg"
             label="description"
+            value={values.description}
             name="description"
             onChange={handleChange}
           />
+          {errors.description && touched.description && <h1 className='text-pink-700'>{errors.description}</h1>}
 
 
           <div className='space-y-2'>

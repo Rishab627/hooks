@@ -12,36 +12,86 @@ import { useNavigate } from 'react-router';
 import * as Yup from 'yup';
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { imageUrl } from "../../../constants/api_urls";
+import { useUpdateProductMutation } from "../../product/productApi";
+
+export const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+
+
+export const productSchema = Yup.object({
+  title: Yup.string().required(),
+  detail: Yup.string().required(),
+  price: Yup.number().required(),
+  stock: Yup.number().required(),
+  brand: Yup.string().required(),
+  category: Yup.string().required(),
+  image: Yup.mixed().required().test('fileType', 'invalid image', (e) => {
+    return validTypes.includes(e.type);
+  })
+});
 
 
 const ProductEditForm = ({ product }) => {
 
   const { user } = useSelector((state) => state.userSlice);
   const nav = useNavigate();
+  const [updateProduct, {isLoading}] = useUpdateProductMutation();
 
-  const productSchema = Yup.object({
-    product_name: Yup.string().required(),
-    product_detail: Yup.string().required(),
-    product_price: Yup.number().required(),
-    countInStock: Yup.number().required(),
-    brand: Yup.string().required(),
-    category: Yup.string().required(),
-    // product_image: Yup.mixed().required().test('fileType', 'invalid image', (e) => {
-    //   return ['image/jpg', 'image/png', 'image/jpeg'].includes(e.type);
-    // })
-  });
+
 
   const { values, handleChange,
     handleSubmit, errors, setFieldValue, touched } = useFormik({
 
       initialValues: {
-
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        stock: product.stock,
+        brand: product.brand,
+        category: product.category,
+        image: null,
+        imageReview: product.image
 
       },
 
       onSubmit: async (val, { resetForm }) => {
         const formData = new FormData();
+        formData.append('title', val.title);
+        formData.append('description', val.description);
+        formData.append('price', Number(val.price));
+        formData.append('category', val.category);
+        formData.append('brand', val.brand);
+        formData.append('stock', Number(val.stock));
+        try {
 
+          if(val.image === null){
+            await updateProduct({
+              body: formData,
+              token: user.token,
+              id: product._id
+            }).unwrap();
+            toast.success('product added succesfully');
+            nav(-1);
+          } else {
+            if (validTypes.includes(val.image.type)) {
+              formData.append('image', val.image);
+              await updateProduct({
+                body: formData,
+                token: user.token,
+                id: product._id
+              }).unwrap();
+              toast.success('product added succesfully');
+              nav(-1);
+            } else {
+              console.log('please provide image');
+            }
+          }
+
+         
+
+        } catch (err) {
+          toast.error(`${err.data?.message}`);
+        }
 
       },
       //  validationSchema: productSchema
@@ -50,7 +100,7 @@ const ProductEditForm = ({ product }) => {
 
 
   return (
-    <Card color="transparent" shadow={false} className="max-w-sm  mx-auto mt-4 mb-4">
+    <Card color="transparent" shadow={false} className="max-w-sm mx-auto  mt-4 mb-4">
       <Typography variant="h4" color="blue-gray">
         Edit Product
       </Typography>
@@ -60,51 +110,48 @@ const ProductEditForm = ({ product }) => {
 
           <Input
             size="lg"
-            placeholder="product_name"
-            label="product_name"
-            name="product_name"
-            value={values.product_name}
+            label="title"
+            name="title"
+            value={values.title}
             onChange={handleChange}
           />
-          {errors.product_name && touched.product_name && <h1 className='text-pink-700'>{errors.product_name}</h1>}
+          {errors.title && touched.title && <h1 className='text-pink-700'>{errors.title}</h1>}
 
           <Input
             size="lg"
-            placeholder="product_price"
-            label="product_price"
-            name="product_price"
-            value={values.product_price}
+            label="price"
+            type="number"
+            name="price"
+            value={values.price}
             onChange={handleChange}
           />
-          {errors.product_price && touched.product_price && <h1 className='text-pink-700'>{errors.product_price}</h1>}
+          {errors.price && touched.price && <h1 className='text-pink-700'>{errors.price}</h1>}
           <Input
             size="lg"
-            placeholder="countInStock"
-            label="countInStock"
-            value={values.countInStock}
+            label="stock"
+            value={values.stock}
             onChange={handleChange}
-            name="countInStock"
+            name="stock"
+            type="number"
           />
-          {errors.countInStock && touched.countInStock && <h1 className='text-pink-700'>{errors.countInStock}</h1>}
+          {errors.stock && touched.stock && <h1 className='text-pink-700'>{errors.stock}</h1>}
           <Select value={values.brand} onChange={(e) => setFieldValue('brand', e)} label="Select Brand">
-            <Option value="Nike">Nike</Option>
-            <Option value="Panasonic">Panasonic</Option>
+          <Option value="samsung">Samsung</Option>
+            <Option value="apple">Apple</Option>
             <Option value="Samsung">Samsung</Option>
-            <Option value="Dolce">Dolce</Option>
-            <Option value="Kfc">Kfc</Option>
+            <Option value="dolce">Dolce</Option>
           </Select>
           <Select value={values.category} onChange={(e) => setFieldValue('category', e)} label="Select Category">
-            <Option value="Clothes">Clothes</Option>
-            <Option value="Beauty">Beauty</Option>
-            <Option value="Tech">Tech</Option>
+          <Option value="clothes">Clothes</Option>
+
+<Option value="tech">Tech</Option>
           </Select>
 
           <Textarea
             size="lg"
-            placeholder="product_detail"
-            label="product_detail"
-            name="product_detail"
-            value={values.product_detail}
+            label="description"
+            name="description"
+            value={values.description}
             onChange={handleChange}
           />
 
@@ -117,22 +164,22 @@ const ProductEditForm = ({ product }) => {
               onChange={(e) => {
                 const file = e.target.files[0];
                 setFieldValue('imageReview', URL.createObjectURL(file))
-                setFieldValue('product_image', file);
+                setFieldValue('image', file);
               }}
               type='file'
               name='image'
               multiple
               accept='image/*'
             />
-            {errors.product_image && touched.product_image && <h1 className='text-pink-700'>{errors.product_image}</h1>}
+            {errors.image && touched.image && <h1 className='text-pink-700'>{errors.image}</h1>}
 
-            {values.imageReview && <img src={values.product_image === null ? `${imageUrl}${values.imageReview}` : values.imageReview} alt="" />}
+            {values.imageReview && <img src={values.image === null ? `${imageUrl}${values.imageReview}` : values.imageReview} alt="" />}
           </div>
 
 
         </div>
 
-        <Button type="submit" className="mt-6" fullWidth>
+        <Button loading={isLoading} type="submit" className="mt-6" fullWidth>
           Submit
         </Button>
 

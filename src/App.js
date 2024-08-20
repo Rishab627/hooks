@@ -6,6 +6,7 @@ import Login from './features/auth/Login';
 import Register from './features/auth/Register';
 import ProductAdmin from './features/admin/ProductAdmin';
 import AddForm from './features/admin/AddForm';
+import ProductEdit from './features/admin/ProductEdit/ProductEdit';
 
 
 
@@ -40,6 +41,10 @@ const App = () => {
         {
           path: 'product-add',
           element: <AddForm/>
+        },
+        {
+          path: 'product/:id',
+          element: <ProductEdit/>
         }
     
     
