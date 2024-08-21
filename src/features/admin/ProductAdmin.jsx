@@ -72,7 +72,7 @@ const AdminProducts = () => {
                     </Typography>
                   </td>
                   <td className={classes}>
-                   <Link to={`/product/${_id}`}> <Button color="light-green" size="sm">Edit</Button></Link>
+                   <Link to={`/product-edit/${_id}`}> <Button color="light-green" size="sm">Edit</Button></Link>
                   </td>
 
                   <td className={classes}>
