@@ -1,11 +1,30 @@
 import { Button, Card, Typography } from '@material-tailwind/react'
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import useAuth from '../../hooks/useAuth'
+import { useFormik } from 'formik'
+import {  setToCarts } from './cartSlice'
 
 const AddCart = ({ product }) => {
-  const { user } = useSelector((state) => state.userSlice);
+  const user  = useAuth();
+  const dispatch = useDispatch();
+
+  const formik = useFormik({
+    initialValues: {
+      qty: 1
+    },
+    onSubmit: (val) => {
+      const newProduct = {
+        ...product,
+        qty: Number(val.qty)
+      };
+
+      dispatch(setToCarts(newProduct));
+    }
+  })
 
   return (
+    <form onSubmit={formik.handleSubmit}>
     <Card className="h-full w-full overflow-scroll">
       <table className="w-full min-w-max table-auto text-left">
         <thead>
@@ -57,9 +76,12 @@ const AddCart = ({ product }) => {
               className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
             >
               <div className=''>
-                {/* defaultValue={formik.values.qty} */}
-                {/* onChange={(e) => formik.setFieldValue('qty', e.target.value)} */}
-                <select name="qty" id="" className=' py-2 bg-white shadow-lg'>
+              
+                
+                <select
+                onChange={(e) => formik.setFieldValue('qty', e.target.value)}
+                
+                name="qty" id="" className=' py-2 bg-white shadow-lg'>
                   {[...Array(product.stock).keys()].map((c) => {
                     return <option key={c + 1} value={c + 1}>{c + 1}</option>
                   })}
@@ -75,9 +97,10 @@ const AddCart = ({ product }) => {
 
       </table>
       <div className='flex justify-center pt-7'>
-        <Button disabled={user?.isAdmin} >Add To Cart</Button>
+        <Button disabled={user?.isAdmin} type='submit' >Add To Cart</Button>
       </div>
     </Card>
+    </form>
   )
 }
 

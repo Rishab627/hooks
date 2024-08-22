@@ -120,9 +120,11 @@ const Header = () => {
                       switch (value) {
                         case 'exist':
                           dispatch(removeUser());
-                        
+                          break;
+                          nav('/')
                         case 'products':
                           nav('/product-admin')
+                          break;
                           closeMenu();
 
 
