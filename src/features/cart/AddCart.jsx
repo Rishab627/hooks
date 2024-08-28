@@ -4,10 +4,12 @@ import { useDispatch } from 'react-redux'
 import useAuth from '../../hooks/useAuth'
 import { useFormik } from 'formik'
 import {  setToCarts } from './cartSlice'
+import { useNavigate } from 'react-router'
 
 const AddCart = ({ product }) => {
   const user  = useAuth();
   const dispatch = useDispatch();
+  const nav = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -97,7 +99,7 @@ const AddCart = ({ product }) => {
 
       </table>
       <div className='flex justify-center pt-7'>
-        <Button disabled={user?.isAdmin} type='submit' >Add To Cart</Button>
+        <Button onClick={() => nav('/cart-page')} disabled={user?.isAdmin} type='submit' >Add To Cart</Button>
       </div>
     </Card>
     </form>
