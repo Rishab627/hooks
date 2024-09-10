@@ -5,7 +5,8 @@ import ProductCard from '../product/ProductCard';
 const Main = () => {
 
 
-  const {isLoading, error, data} = useGetAllProductsQuery();
+
+  const { isLoading, error, data } = useGetAllProductsQuery();
 
 
   if (isLoading) {
@@ -13,17 +14,15 @@ const Main = () => {
   }
 
 
-
-
   return (
-    <div className='p-4 grid grid-cols-3 gap-4'>
+    <div className='p-4 grid grid-cols-3 gap-6'>
+
+      {data && data.products.map((product) => {
+        return <ProductCard key={product._id} product={product} />
+      })}
 
 
-{data && data.map((product) => {
-  return <ProductCard key={product._id} product={product}/>
-})}
 
-        
     </div>
   )
 }

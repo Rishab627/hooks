@@ -1,19 +1,27 @@
-import React from 'react';
+import React from 'react'
 import {
-    Card,
-    CardHeader,
-    CardBody,
-    CardFooter,
-    Typography,
-    Button,
-    Tooltip,
-    IconButton,
-    Rating,
-  } from "@material-tailwind/react";
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Typography,
+  Button,
+  Tooltip,
+  IconButton,
+  Rating,
+} from "@material-tailwind/react";
 import { imageUrl } from '../../constants/api_urls';
 import { useNavigate } from 'react-router';
 
-const ProductCard = ({ product: {image, title, description, rating, _id}}) => {
+
+// {
+//   product: {
+//     title: 'sample'
+//   }
+// }
+const ProductCard = ({ product: { image, title, description, rating, _id } }) => {
+
+
   const nav = useNavigate();
   return (
     <Card onClick={() => nav(`/product-detail/${_id}`)} className="w-full shadow-lg cursor-pointer hover:shadow-2xl">
@@ -44,15 +52,15 @@ const ProductCard = ({ product: {image, title, description, rating, _id}}) => {
           <Typography variant="h5" color="blue-gray" className="font-medium">
             {title}
           </Typography>
-          
+
         </div>
         <Typography color="gray">
-          {description.substring(0,100) }
+          {description.substring(0, 100) + '....'}
         </Typography>
-        
+
       </CardBody>
       <CardFooter className="pt-3">
-        <Rating value={rating} readonly/>
+        <Rating value={Math.floor(rating)} readonly />
       </CardFooter>
     </Card>
   )

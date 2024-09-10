@@ -11,75 +11,92 @@ import ProductDetail from './features/product/ProductDetail';
 import AdminRoute from './ui/AdminRoute';
 import CartPage from './features/cart/CartPage';
 
+import ProfileMain from './features/user/ProfileMain';
+import OrderDetail from './features/order/OrderDetail';
+import UserRoute from './ui/UserRoute';
+import NoLoginRoute from './ui/NoLoginRoute';
 
 
 const App = () => {
-
-
-    // const {isError, isFetching, isLoading, data} = useGetAllProductsQuery();
-
+  //routes
   const router = createBrowserRouter([
-
     {
       path: '/',
       element: <RootLayout />,
       children: [
         {
           index: true,
-          element:<Main/>
+          element: <Main />
+        },
 
-        },
         {
-            path: 'login',
-            element: <Login/>
-        },
-        {
-            path: 'register',
-            element: <Register/>
+          element: <NoLoginRoute />,
+          children: [
+            {
+              path: 'login',
+              element: <Login />
+            },
+            {
+              path: 'register',
+              element: <Register />
+            },
+          ]
         },
 
 
         //admin routes
+
         {
-          element: <AdminRoute/>,
+          element: <AdminRoute />,
           children: [
             {
               path: 'product-admin',
-              element: <ProductAdmin/>
+              element: <ProductAdmin />
             },
             {
               path: 'product-add',
-              element: <AddForm/>
+              element: <AddForm />
             },
             {
               path: 'product-edit/:id',
-              element: <ProductEdit/>
-            },
+              element: <ProductEdit />
+            }
           ]
         },
-      
-        
-        
-       
+
+
+
+
         {
           path: 'product-detail/:id',
-          element: <ProductDetail/>
+          element: <ProductDetail />
         },
-    
+
         {
-          path: 'cart-page',
-          element: <CartPage/>
-        }    
+          element: <UserRoute />,
+          children: [
+            {
+
+              path: 'cart-page',
+              element: <CartPage />
+            },
+
+            {
+              path: 'user-profile',
+              element: <ProfileMain />
+            },
+            {
+              path: 'user-order/:id',
+              element: <OrderDetail />
+            },
+
+          ]
+        }
 
 
       ]
-
-    },
-
-
-
+    }
   ]);
-
   return <RouterProvider router={router} />
 }
 

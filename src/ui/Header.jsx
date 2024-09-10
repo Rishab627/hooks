@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { removeUser } from "../features/auth/userSlice";
 
-// profile menu component
+
 const userMenu = [
   {
     label: "Profile",
@@ -43,8 +43,6 @@ const adminMenu = [
     icon: UserCircleIcon,
     value: 'profile'
   },
-
-
   {
     label: "Products",
     icon: ShoppingBagIcon,
@@ -58,6 +56,7 @@ const adminMenu = [
     value: 'exist'
   },
 ];
+
 
 
 const Header = () => {
@@ -75,7 +74,6 @@ const Header = () => {
     <Navbar className="mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
         <Typography
-          onClick= {() => nav('/')}
           as="a"
           href="#"
           className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
@@ -93,7 +91,7 @@ const Header = () => {
             <MenuHandler>
               <Button
                 variant="text"
-                color="blue-gray"
+
                 className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
               >
                 <Avatar
@@ -121,14 +119,15 @@ const Header = () => {
                         case 'exist':
                           dispatch(removeUser());
                           break;
-                          nav('/')
                         case 'products':
                           nav('/product-admin')
                           break;
-                          closeMenu();
-
-
+                        case 'profile':
+                          nav('/user-profile')
+                          break;
                       }
+                      closeMenu();
+
                     }}
                     className={`flex items-center gap-2 rounded ${isLastItem
                       ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"

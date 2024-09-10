@@ -6,8 +6,40 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useAddOrderMutation } from "../features/order/orderApi";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { removeCarts } from "../features/cart/cartSlice";
 
-const CustomDialog = ({ open, handleOpen }) => {
+const CustomDialog = ({ open, handleOpen, user, carts, totalAmount }) => {
+
+  const dispatch = useDispatch();
+
+  const updateCart = carts.map((cart) => {
+    return { qty: cart.qty, product: cart._id };
+  });
+
+
+  const [addOrder, { isLoading }] = useAddOrderMutation();
+  const handleOrder = async () => {
+    try {
+
+      await addOrder({
+        body: {
+          totalAmount,
+          products: updateCart
+        },
+        token: user.token
+      }).unwrap();
+      dispatch(removeCarts());
+      toast.success("Order Placed Successfully");
+      handleOpen();
+
+    } catch (err) {
+      toast.error(err.data?.message);
+    }
+  };
+
   return (
     <Dialog open={open} handler={handleOpen}>
       <DialogHeader>Its a simple dialog.</DialogHeader>
@@ -26,7 +58,7 @@ const CustomDialog = ({ open, handleOpen }) => {
         >
           <span>Cancel</span>
         </Button>
-        <Button variant="gradient" color="green" onClick={handleOpen}>
+        <Button loading={isLoading} variant="gradient" color="green" onClick={handleOrder}>
           <span>Confirm</span>
         </Button>
       </DialogFooter>

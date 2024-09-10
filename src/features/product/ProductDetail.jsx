@@ -4,10 +4,14 @@ import { useParams } from 'react-router';
 import { imageUrl } from '../../constants/api_urls';
 import { Rating } from '@material-tailwind/react';
 import AddCart from '../cart/AddCart';
+import ReviewList from '../review/ReviewList';
+import AddReview from '../review/AddReview';
+import useAuth from '../../hooks/useAuth';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const { isLoading, error, data } = useGetProductByIdQuery(id);
+  const user = useAuth();
 
   if (isLoading) {
     return <h1>Loading....</h1>
@@ -23,10 +27,10 @@ const ProductDetail = () => {
           <img className='w-full' src={`${imageUrl}${data.image}`} alt="" />
         </div>
         <div className="info space-y-3">
-          <h1>{data.title}</h1>
+          <h1>{data.name}</h1>
           <p>{data.description}</p>
           <p>Rs.{data.price}</p>
-          <Rating value={data.rating} readonly />
+          <Rating value={Math.floor(data.rating)} readonly />
         </div>
 
         {data && <AddCart product={data} />}
@@ -35,7 +39,12 @@ const ProductDetail = () => {
 
 
       </div>
-      {/* <ProductReview user={user} id={product._id} reviews={product.reviews} /> */}
+
+      <div className='p-10'>
+        <AddReview user={user} id={data?._id} />
+        <ReviewList reviews={data?.reviews} />
+      </div>
+
     </>
   )
 }
